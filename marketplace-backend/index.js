@@ -13,7 +13,7 @@ const limiter = rateLimit({
 app.use(limiter);
 const allowedOrigins = [
   process.env.FRONTEND_URL, 
-  'https://your-vercel-app.vercel.app',
+  'https://marketplace-60dw1a3ia-fardeens-projects-9e4b0d6b.vercel.app',
   'https://*.vercel.app', 
   ...(process.env.NODE_ENV === 'development' ? [
     'http://localhost:5173',
