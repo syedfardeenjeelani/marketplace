@@ -12,17 +12,27 @@ const limiter = rateLimit({
 
 app.use(limiter);
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174' 
+  process.env.FRONTEND_URL, 
+  'https://your-vercel-app.vercel.app',
+  'https://*.vercel.app', 
+  ...(process.env.NODE_ENV === 'development' ? [
+    'http://localhost:5173',
+    'http://localhost:5174'
+  ] : [])
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+  origin: function (origin, callback) { 
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.some(allowedOrigin => 
+      origin === allowedOrigin || 
+      origin.endsWith(`.${allowedOrigin}`)
+    )) {
+      return callback(null, true);
     }
+    
+    callback(new Error(`Origin ${origin} not allowed by CORS`));
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
