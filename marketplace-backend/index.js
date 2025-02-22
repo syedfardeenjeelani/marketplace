@@ -38,6 +38,9 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.json({ message: 'Marketplace API is running' });
+});
 app.use('/api', router);
 
 const PORT = process.env.PORT || 5000;
